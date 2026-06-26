@@ -1,0 +1,67 @@
+project:
+  type: website
+  output-dir: docs
+  resources:
+    - resources/
+    - exercises/
+    - data/
+
+website:
+  title: "DMgtAsia · Introduction to R & RStudio"
+  description: "Introduction to R and RStudio, the data science foundations module of the DMgtAsia course"
+  favicon: dmgt_asia_logo.png
+  navbar:
+    background: light
+    logo: dmgt_asia_logo.png
+    left:
+      - href: index.qmd
+        text: Home
+      - href: setup.qmd
+        text: Setup
+      - href: about.qmd
+        text: About
+    right:
+      - icon: github
+        href: https://github.com/drarunmitra/DMgtAsia_DataScience_IntroR
+  sidebar:
+    style: docked
+    search: true
+    collapse-level: 1
+    contents:
+      - text: Home
+        href: index.qmd
+      - section: "Session-I · Foundations"
+        contents:
+          - text: "Foundations of R & RStudio"
+            href: session1-foundations.qmd
+      - section: "Session-II · Best Practices"
+        contents:
+          - text: "Best Practices in Data Science"
+            href: session2-best-practices.qmd
+      - section: "Session-III · Working with Data"
+        contents:
+          - text: "Working with Data in R"
+            href: session3-working-with-data.qmd
+      - section: "Session-IV · Exercises"
+        contents:
+          - text: "Hands-on Exercises"
+            href: session4-exercises.qmd
+      - section: "Reference"
+        contents:
+          - text: Setup
+            href: setup.qmd
+          - text: About
+            href: about.qmd
+  page-footer:
+    left: "DMgtAsia · Introduction to R & RStudio"
+    right: "AIIMS Bibinagar · SCTIMST, Trivandrum"
+
+format:
+  html:
+    theme: dmgt-web.scss
+    toc: true
+
+execute:
+  freeze: auto
+  warning: false
+  message: false

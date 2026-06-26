@@ -1,0 +1,49 @@
+---
+title: "Introduction to R and RStudio"
+subtitle: "DMgtAsia · Data Science Foundations Module"
+author:
+  - name: "Dr. Arun Mitra"
+    affiliation: "AIIMS Bibinagar"
+  - name: "Prof. (Dr.) Biju Soman"
+    affiliation: "AMCHSS, SCTIMST, Trivandrum"
+date: last-modified
+---
+
+![](dmgt_asia_logo.png){width=160 fig-align="left"}
+
+## Welcome
+
+This is the **data science foundations** module of the DMgtAsia course, and the precursor to
+the Spatial Epidemiology module. It introduces R and RStudio for public health work, from first
+principles to a reproducible analysis.
+
+No prior R experience is assumed. The first thing you run will work.
+
+## What you will be able to do
+
+- Explain why R and a reproducible workflow suit public health.
+- Find your way around RStudio: panes, Projects, and `here()`.
+- Use R basics: objects, vectors, data types, functions, and packages.
+- Read a dataset, inspect it, and wrangle it with the tidyverse.
+- Follow good data science practice: reproducibility, project structure, and coding style.
+
+## Sessions
+
+| Session | Theme | Focus |
+|------|-------|-------|
+| **Session-I** | Foundations | R, RStudio, the data science workflow, R basics |
+| **Session-II** | Best Practices in Data Science | reproducibility, tool choice, literate programming, structure, style |
+| **Session-III** | Working with Data | exploratory data analysis and the `dplyr` verbs |
+| **Session-IV** | Exercises | hands-on practice on a real dataset |
+
+Start with **[Setup](setup.qmd)** to prepare your machine, then open Session-I.
+
+## Live code
+
+The Foundations session runs R in your browser (webR), so you can edit and run code on the page
+with nothing installed. For the full hands-on work you use R and RStudio on your own machine.
+
+## Acknowledgements
+
+Developed at AIIMS Bibinagar and the Achutha Menon Centre for Health Science Studies, SCTIMST.
+Built on R, the tidyverse, and Quarto.

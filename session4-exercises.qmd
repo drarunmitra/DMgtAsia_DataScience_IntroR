@@ -1,0 +1,122 @@
+---
+title: "Hands-on Exercises"
+subtitle: "DMgtAsia · Session-IV"
+toc: true
+---
+
+Practise the workflow from Sessions I to III on a real dataset, in RStudio. Work through the
+tasks; each has a collapsible solution. The full scripts are in the repo:
+[`exercises/d1_low_birth_weight_demo.R`](exercises/d1_low_birth_weight_demo.R) and
+[`exercises/d1_low_birth_weight_solutions.R`](exercises/d1_low_birth_weight_solutions.R).
+
+## The dataset
+
+We use **`birthwt`** from the `MASS` package: 189 births from a study of risk factors for low
+birth weight. Key variables: `low` (birth weight under 2.5 kg, yes/no), `age` (mother's age),
+`lwt` (mother's weight), `smoke` (smoking during pregnancy), `bwt` (birth weight in grams).
+
+## 1. Load packages and data
+
+```r
+if (!requireNamespace("pacman", quietly = TRUE)) install.packages("pacman")
+pacman::p_load(MASS, tidyverse, skimr, janitor, here)
+
+lbw <- as_tibble(MASS::birthwt)
+```
+
+## 2. Tidy the column names
+
+::: {.callout-note}
+The `birthwt` names are terse. Make them tidy and consistent.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+```r
+lbw <- lbw |> janitor::clean_names()
+names(lbw)
+```
+:::
+
+## 3. Take a first look
+
+::: {.callout-note}
+How many rows and columns? What types are the variables? Any missing values?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+```r
+glimpse(lbw)
+skimr::skim(lbw)
+```
+:::
+
+## 4. Recode for readability
+
+::: {.callout-note}
+Turn `low` and `smoke` from 0/1 into meaningful labels.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+```r
+lbw <- lbw |>
+  mutate(
+    low_birth_weight = factor(low, levels = c(0, 1),
+                              labels = c("Normal", "Low")),
+    smoking          = factor(smoke, levels = c(0, 1),
+                              labels = c("Non-smoker", "Smoker"))
+  )
+```
+:::
+
+## 5. Summarise
+
+::: {.callout-note}
+What is the mean birth weight by smoking status? How many low-birth-weight babies by smoking
+status?
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+```r
+lbw |>
+  group_by(smoking) |>
+  summarise(
+    n         = n(),
+    mean_bwt  = mean(bwt),
+    pct_low   = mean(low == 1) * 100
+  )
+```
+:::
+
+## 6. Visualise
+
+::: {.callout-note}
+Plot the distribution of birth weight, and compare it by smoking status.
+:::
+
+::: {.callout-tip collapse="true"}
+## Solution
+```r
+ggplot(lbw, aes(bwt)) +
+  geom_histogram(bins = 20) +
+  labs(x = "Birth weight (g)", y = "Count") +
+  theme_minimal()
+
+ggplot(lbw, aes(smoking, bwt)) +
+  geom_boxplot() +
+  labs(x = NULL, y = "Birth weight (g)") +
+  theme_minimal()
+```
+:::
+
+## Stretch tasks
+
+-   Does mean birth weight differ by mother's smoking after grouping by `race`?
+-   Make a clean summary table with `gtsummary::tbl_summary()`.
+-   Save your cleaned data to `data/processed/lbw_clean.csv` with `readr::write_csv()` and
+    `here()`.
+
+When you are done, you are ready for the **Spatial Epidemiology** module.

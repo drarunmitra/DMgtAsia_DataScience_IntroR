@@ -1,0 +1,39 @@
+---
+title: "Setup & Prerequisites"
+toc: true
+---
+
+For the live code on the Foundations page you need nothing but a browser. For the hands-on
+exercises you need R and RStudio. Allow about 20 minutes.
+
+## 1. Software
+
+- **R** ≥ 4.3: <https://cran.rstudio.com/>
+- **RStudio** (latest): <https://posit.co/downloads/>
+
+## 2. R packages
+
+In RStudio, run once:
+
+```r
+install.packages(c("tidyverse", "here", "janitor", "skimr", "pacman", "MASS"))
+```
+
+`tidyverse` gives you `dplyr`, `ggplot2`, `readr` and friends. `here` builds reliable file
+paths. `janitor::clean_names()` tidies column names. `skimr::skim()` summarises a dataset.
+`MASS` supplies the `birthwt` dataset used in the exercises.
+
+## 3. Project
+
+Open `DMgtAsia_DataScience_IntroR.Rproj` in RStudio. Working with an RStudio Project means
+`here()` paths resolve from the project root, so your code runs the same on any machine.
+
+## 4. Pre-flight check
+
+```r
+library(tidyverse)
+library(here)
+cat("R", as.character(getRversion()), "ready\n")
+```
+
+If that runs without error, you are ready. Open **Session-I**.

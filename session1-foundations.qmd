@@ -1,0 +1,165 @@
+---
+title: "Foundations of R & RStudio"
+subtitle: "DMgtAsia · Session-I"
+format:
+  live-html:
+    toc: true
+  live-revealjs:
+    output-file: slides-session1-foundations.html
+    theme: [default, dmgt.scss]
+    logo: dmgt_asia_logo.png
+    footer: "DMgtAsia · Introduction to R & RStudio"
+    width: 1280
+    height: 720
+    slide-number: c/t
+    show-slide-number: all
+    progress: true
+    transition: fade
+    scrollable: true
+    incremental: false
+webr:
+  packages:
+    - ggplot2
+engine: knitr
+other-links:
+  - text: "View as slides"
+    href: slides-session1-foundations.html
+    icon: easel2
+---
+
+## Data science for public health
+
+-   Public health runs on data: surveys, surveillance, registers, trials.
+-   Data science is the workflow that turns that data into decisions:
+    import, tidy, transform, visualise, model, communicate.
+-   We do it in a way others can check and repeat.
+
+::: aside
+The live R cells on this page run in your browser. Nothing to install.
+:::
+
+---
+
+## Why R and RStudio
+
+-   **R** is a language built by and for statisticians and epidemiologists.
+-   It is free, open, and has a package for almost every method in public health.
+-   **RStudio** is the workbench that makes R comfortable to use.
+-   Everything is scripted, so an analysis is a document you can re-run, not a set of clicks.
+
+---
+
+## The RStudio tour
+
+-   **Source** (top left): your scripts and Quarto documents.
+-   **Console** (bottom left): R runs here.
+-   **Environment** (top right): the objects you have created.
+-   **Files / Plots / Help** (bottom right): outputs and documentation.
+-   **Projects** keep one analysis self-contained; with `here()`, file paths just work.
+
+---
+
+## Objects and assignment (live)
+
+Press **Run**. `<-` stores a value in a named object.
+
+```{webr}
+age <- 27
+sex <- "female"
+age
+sex
+```
+
+The keyboard shortcut for `<-` is Alt/Option and minus.
+
+---
+
+## Quiz: assignment
+
+```{ojs}
+//| echo: false
+viewof q1 = Inputs.radio(
+  ["= =", "<-", "==", "->>"],
+  { label: "Which operator assigns a value to an object in R?" }
+);
+html`${q1 == null ? "" : q1 === "<-" ? "<strong>Correct.</strong> R assigns with <code>&lt;-</code> (Alt/Option and minus)." : "<em>Not quite.</em> R's assignment arrow points left."}`
+```
+
+---
+
+## Vectors (live)
+
+A vector holds several values of the same type. `c()` combines them.
+
+```{webr}
+weights <- c(2.5, 3.1, 2.9, 3.4, 2.2)   # birth weights in kg
+weights
+mean(weights)
+length(weights)
+```
+
+Try changing a number and running again.
+
+---
+
+## Data types
+
+-   **numeric** `3.4`, counts and measurements.
+-   **character** `"female"`, text in quotes.
+-   **logical** `TRUE` / `FALSE`.
+-   **factor** a category with fixed levels (for example sex, district).
+
+```{webr}
+class(weights)
+class("female")
+class(weights > 3)
+```
+
+---
+
+## Functions
+
+-   A function takes inputs and returns an output: `mean(weights)`.
+-   You name the function, then pass arguments in brackets.
+-   `summary()` describes a whole vector at once.
+
+```{webr}
+summary(weights)
+```
+
+---
+
+## Packages
+
+-   A package is a bundle of functions. Install once, load each session.
+-   `install.packages("tidyverse")` downloads it (done on your machine).
+-   `library(tidyverse)` loads it for use.
+
+```{webr}
+library(ggplot2)
+df <- data.frame(weight = c(2.5, 3.1, 2.9, 3.4, 2.2, 3.8))
+ggplot(df, aes(weight)) +
+  geom_histogram(bins = 6) +
+  theme_minimal()
+```
+
+---
+
+## Quiz: install vs load
+
+```{ojs}
+//| echo: false
+viewof q2 = Inputs.radio(
+  ["Installs a package from the internet", "Loads an installed package for use", "Deletes a package", "Updates R"],
+  { label: "What does library(tidyverse) do?" }
+);
+html`${q2 == null ? "" : q2 === "Loads an installed package for use" ? "<strong>Correct.</strong> install.packages() downloads once; library() loads it each session." : "<em>Try again.</em> Downloading the package is a separate step."}`
+```
+
+## Recap
+
+-   Data science is a workflow: import, tidy, transform, visualise, communicate, reproducibly.
+-   R is the language, RStudio is the workbench, Projects plus `here()` keep paths sane.
+-   Objects (`<-`), vectors (`c()`), data types, and functions are the building blocks.
+-   Packages add capability: install once, `library()` each session.
+-   Next: best practices, then working with real data.

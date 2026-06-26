@@ -1,0 +1,18 @@
+# Quarto / R build artifacts
+/.quarto/
+/_freeze/
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# OS
+.DS_Store
+
+# Rendered site lives in the separate website repo (DMgtAsia_DataScience_IntroR_site)
+/docs/
+
+# Exercise outputs
+/plots/*.png
+
+**/*.quarto_ipynb
