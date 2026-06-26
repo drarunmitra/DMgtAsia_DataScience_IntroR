@@ -109,6 +109,34 @@ $code-block-font-size:             0.72em;
 .reveal code span.op,
 .reveal code span.sc { color: c("graphite") !important; }
 
+/* ---------- codewindow: a monochrome "file frame" for code listings ---------- */
+.reveal .codewindow {
+  border: 1px solid c("line");
+  border-radius: 10px;
+  overflow: hidden;
+  background: c("paper");
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+  font-size: 0.62em;
+}
+.reveal .codewindow > p:first-child {
+  margin: 0;
+  padding: 0.35em 0.8em;
+  background: c("smoke");
+  border-bottom: 1px solid c("line");
+  color: c("muted");
+  font-family: $font-family-monospace;
+  font-size: 0.85em;
+}
+.reveal .codewindow pre,
+.reveal .codewindow pre code { background: c("paper"); border: 0; margin: 0; }
+
+/* ---------- tabset: monochrome active tab ---------- */
+.reveal .panel-tabset [role="tab"][aria-selected="true"] {
+  color: c("ink");
+  border-bottom: 2px solid c("ink");
+  font-weight: 600;
+}
+
 /* ---------- figures: keep inside the slide (room for title + caption) ---------- */
 .reveal .slides img { max-height: 52vh; width: auto; }
 .reveal .slides .column img,
