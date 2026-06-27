@@ -2,9 +2,9 @@
 title: "Working with Data in R"
 subtitle: "DMgtAsia · Session-III"
 format:
-  html:
+  live-html:
     toc: true
-  revealjs:
+  live-revealjs:
     output-file: slides-session3-working-with-data.html
     theme: [default, dmgt.scss]
     logo: dmgt_asia_logo.png
@@ -16,11 +16,12 @@ format:
     progress: true
     transition: fade
     scrollable: true
-    code-line-numbers: true
-    code-overflow: wrap
-    highlight-style: github
     incremental: false
-    embed-resources: false
+webr:
+  packages:
+    - dplyr
+    - readr
+engine: knitr
 other-links:
   - text: "View as slides"
     href: slides-session3-working-with-data.html
@@ -158,237 +159,91 @@ In short, it makes data exploration and data manipulation easy and fast in R.
 
 ## Let us load some data
 
+The cells on this page run live in your browser. This first one loads the WHO TB data and runs
+on its own (the first run takes a few seconds while `dplyr` loads).
 
-```{r}
-#| include: false
-
-options(tidyverse.quiet = TRUE)
-# keep printed tibbles narrow and short so they fit one slide
+```{webr}
+#| autorun: true
+library(dplyr)
+library(readr)
 options(width = 70, pillar.print_min = 5, pillar.print_max = 5)
-library(tidyverse)
-library(here)
-library(rio)
 
-filepath <- here("data", "who_tubercolosis_data.csv")
+download.file(
+  "https://drarunmitra.github.io/DMgtAsia_DataScience_IntroR_site/data/who_tubercolosis_data.csv",
+  "tb.csv"
+)
+tb <- read_csv("tb.csv", show_col_types = FALSE)
 
-tb <- filepath |>
-  import(setclass = "tibble")
-```
-
-::: {.panel-tabset}
-
-
-### Code
-
-```r
-library(tidyverse)
-library(here)
-library(rio)
-
-filepath <- here("data", "who_tubercolosis_data.csv")
-
-tb <- filepath |>
-  import(setclass = "tibble")
+# used later, in the %in% demo
+indian_subcont <- c("India", "Nepal", "Pakistan", "Bangladesh", "Afghanistan", "Sri Lanka")
 
 tb
 ```
 
-
-### Output
-
-```{r}
-#| echo: false
-
-tb |>
-  print(width = 70)
-```
-:::
-
-
 ## Take a Quick Look at the data
 
-::: {.panel-tabset}
+`glimpse()` shows every column down the page. Press **Run**.
 
-
-### Code
-```r
-tb |>
-  glimpse()
+```{webr}
+glimpse(tb)
 ```
-
-
-### Output
-
-```{r}
-#| echo: false
-
-tb |>
-  glimpse(width = 70)
-```
-
-:::
 
 ## Check the first few rows
 
-
-```r
-tb |>
-  head()
+```{webr}
+head(tb)
 ```
-
-
-```{r}
-#| echo: false
-
-tb |>
-  head() |>
-  print(width = 70)
-```
-
-
 
 ## Check the dimensions and the column names
 
+```{webr}
+dim(tb)
 
-```{r}
-#| echo: true
-
-tb |>
-  dim()
-
-tb |>
-  names()
+names(tb)
 ```
 
+## Unique countries in the bottom 50 rows
 
-## Lets find the unique countries in the bottom 50 rows of the dataset
+With the pipe, the steps read left to right: take `tb`, keep the last 50 rows, list the
+distinct countries.
 
-
-
-::: {.panel-tabset}
-
-
-### Without `|>`
-
-```{r}
-#| echo: true
-
-unique(tail(tb, n = 50)$country)
-
-```
-
-###
-
-### With `|>`
-
-```{r}
-#| echo: true
-
+```{webr}
 tb |>
-  tail(50)  |>
+  tail(50) |>
   distinct(country)
 ```
 
-:::
-
-
 ## `distinct()` and `count()`
 
-The `distinct()` function will return the distinct values of a column, while `count()` provides both the distinct values of a column and then number of times each value shows up.
+`distinct()` returns the distinct values of a column. `count()` returns each distinct value and
+how many times it appears. Try both.
 
-::: {.columns}
-
-::: {.column width="40%"}
-
-```r
-tb  |>
+```{webr}
+tb |>
   distinct(who_region)
 ```
 
-```{r}
-#| echo: false
-
-tb  |>
-  distinct(who_region)
-```
-
-
-:::
-
-::: {.column width="10%"}
-
-:::
-
-
-::: {.column width="50%"}
-```r
-tb  |>
+```{webr}
+tb |>
   count(who_region)
 ```
-
-```{r}
-#| echo: false
-
-tb  |>
-  count(who_region)
-```
-
-:::
-:::
-
-
 
 ## `arrange()`
 
-The `arrange()` function does what it sounds like. It takes a data frame or tbl and arranges (or sorts) by column(s) of interest.
+`arrange()` sorts by a column. Use `desc()` (or a leading `-`) to sort descending. Edit and
+re-run.
 
-Use the `desc()` function to arrange by descending.
-
-
-::: {.columns}
-
-::: {.column width="35%"}
-
-```r
+```{webr}
 tb |>
   count(who_region) |>
   arrange(n)
 ```
 
-```{r}
-#| echo: false
-
+```{webr}
 tb |>
   count(who_region) |>
-  arrange(n)
+  arrange(-n)        # alt: arrange(desc(n))
 ```
-
-
-:::
-
-::: {.column width="5%"}
-
-:::
-
-
-::: {.column width="60%"}
-```r
-tb |>
-  count(who_region) |>
-  arrange(-n) # alt: arrange(desc(n))
-```
-
-```{r}
-#| echo: false
-
-tb |>
-  count(who_region) |>
-  arrange(-n)
-```
-
-:::
-:::
-
 
 ## Logical Operators in R
 
@@ -396,10 +251,9 @@ tb |>
 
 ::: {.column width="50%"}
 
+- To satisfy *all* of several conditions, use the "and" operator, `&`.
 
-- If you want to satisfy *all* of multiple conditions, you can use the "and" operator, `&`.
-
-- The "or" operator `|` (the vertical pipe character, shift-backslash) will return a subset that meet *any* of the conditions.
+- The "or" operator `|` returns rows that meet *any* of the conditions.
 
 :::
 
@@ -411,221 +265,112 @@ tb |>
 
 :::
 
-## `filter()`
+## `filter()`: rows from 2015 on
 
-- Rows with year 2015 and above
-
-
-```r
-tb|>
+```{webr}
+tb |>
   filter(year >= 2015)
 ```
 
-```{r}
-#| echo: false
+## `filter()`: all entries for India
 
-tb|>
-  filter(year >= 2015) |>
-  print(width = 70)
-```
-
-## `filter()`
-
-- All entries for India
-
-```r
-tb|>
+```{webr}
+tb |>
   filter(country == "India")
 ```
 
-
-```{r}
-#| echo: false
-
-tb|>
-  filter(country == "India")  |>
-  print(width = 70)
-```
-
-
 ## Filter by year and country
 
-```r
+```{webr}
 tb |>
   filter(year >= 2015 & country == "India")
 ```
 
-```{r}
-#| echo: false
+## The `%in%` operator
 
-tb|>
-  filter(year >= 2015 & country == "India")  |>
-  print(width = 70)
-```
+To filter a categorical variable for several levels at once, use `%in%`. `indian_subcont` was
+defined in the first cell.
 
-
-## The `%in%` function
-
-- To `filter()` a categorical variable for only certain levels, we can use the `%in%` operator.
-
-- Let's see data from India, Nepal, Pakistan and Bangladesh First we will have to figure out how those are spelled in this dataset.
-
-- Open the spreadsheet viewer and find out.
-
-- We'll see a way to find them in code later on in the course.
-
-----
-
-
-```r
-# Create the Indian Subcontinent Variable
-indian_subcont <- c(
-            "India",
-            "Nepal",
-            "Pakistan",
-            "Bangladesh",
-            "Afghanistan"
-            )
-
-# Filter using the %in% function
-tb  |>
-  filter(country %in% indian_subcont) |>
-  count(country)
-
-```
-
-```{r}
-#| echo: false
-
-# Create the Indian Subcontinent Variable
-indian_subcont <- c(
-            "India",
-            "Nepal",
-            "Pakistan",
-            "Bangladesh",
-            "Afghanistan",
-            "Sri Lanka"
-            )
-
-# Filter using the %in% function
-tb  |>
+```{webr}
+tb |>
   filter(country %in% indian_subcont) |>
   count(country)
 ```
 
+## `summarize()`
 
+`summarize()` collapses many values to one. `n()` counts rows; `n_distinct()` counts distinct
+values.
 
-
-##   `summarize()`
-
-- The `summarize()` function summarizes multiple values to a single value.
-
-- On its own the `summarize()` function doesn't seem to be all that useful.
-
-The dplyr package provides a few convenience functions called `n()` and `n_distinct()` that tell you the number of observations or the number of distinct values of a particular variable.
-
-`summarize()` is the same as `summarise()`
-
-
-## `summarize()`  in Action
-
-
-```{r}
-#| echo: true
-
-tb|>
-  summarize(n = n(),
-            n_countries = n_distinct(country),
-            n_years = n_distinct(year),
-            mean_hiv_percent = mean(hiv_percent, na.rm = TRUE),
-            sd_hiv_percent = sd(hiv_percent, na.rm = TRUE))
+```{webr}
+tb |>
+  summarize(
+    n                = n(),
+    n_countries      = n_distinct(country),
+    n_years          = n_distinct(year),
+    mean_hiv_percent = mean(hiv_percent, na.rm = TRUE),
+    sd_hiv_percent   = sd(hiv_percent, na.rm = TRUE)
+  )
 ```
-
-
-
-## `group_by()`
-
-- We saw that `summarize()` isn't that useful on its own. Neither is `group_by()`.
-
-- All this does is takes an existing data frame and converts it into a grouped data frame where operations are performed by group.
-
-- The real power comes in where `group_by()` and `summarize()` are used together. First, write the `group_by()` statement. Then pipe the result to a call to `summarize()`.
 
 ## `group_by()` and `summarize()`
 
-```{r}
-#| echo: true
+The power of `summarize()` shows when you group first. Summaries are then computed per group.
 
+```{webr}
 tb |>
-  group_by(who_region)  |>
-  summarize(n_countries = n_distinct(country),
-            mean_inc = mean(incidence_100k, na.rm = TRUE),
-            sd_inc = sd(incidence_100k, na.rm = TRUE)) |>
+  group_by(who_region) |>
+  summarize(
+    n_countries = n_distinct(country),
+    mean_inc    = mean(incidence_100k, na.rm = TRUE),
+    sd_inc      = sd(incidence_100k, na.rm = TRUE)
+  ) |>
   ungroup()
 ```
 
+## `mutate()` and `if_else()`
 
+`mutate()` creates or changes a column. Here we flag the Indian subcontinent.
 
-
-## `mutate()`
-- Mutate creates a new variable or modifies an existing one.
-
-![](images/dplyr_mutate.png){fig-align="center"}
-
-## `if_else()`
-
-Lets create a column called `ind_sub` if the country is in the Indian Subcontinent.
-
-
-```{r}
-#| echo: true
-
+```{webr}
 tb |>
   mutate(ind_sub = if_else(country %in% indian_subcont,
-                              "Indian Subcontinent", "Others")) |>
+                           "Indian Subcontinent", "Others")) |>
   select(country, ind_sub) |>
   filter(ind_sub != "Others") |>
   distinct()
 ```
 
+## Group by the new variable
 
-## `group_by()` and `summarize()`
-
-```{r}
-#| echo: true
-
+```{webr}
 tb |>
   mutate(ind_sub = if_else(country %in% indian_subcont,
-                              "Indian Subcontinent", "Others")) |>
-  group_by(ind_sub)  |>
-  summarize(n_countries = n_distinct(country),
-            mean_inc = mean(incidence_100k, na.rm = TRUE),
-            sd_inc = sd(incidence_100k, na.rm = TRUE)) |>
+                           "Indian Subcontinent", "Others")) |>
+  group_by(ind_sub) |>
+  summarize(
+    n_countries = n_distinct(country),
+    mean_inc    = mean(incidence_100k, na.rm = TRUE)
+  ) |>
   ungroup()
 ```
 
-
-
 ## `case_when()`
 
-Alternative of `if_else()`
+Alternative to `if_else()` for more than two options.
 
 ![](images/case_when.jpg){fig-align="center"}
 
 ## `if_else()` vs `case_when()`
 
-Note that the `if_else()` function may result in slightly shorter code if you only need to code for 2 options.
-
-For more options, nested `if_else()` statements become hard to read and could result in mismatched parentheses so `case_when()` will be a more elegant solution.
-
+Use `if_else()` for two options. For more options, nested `if_else()` becomes hard to read, so
+`case_when()` is clearer.
 
 ## `join()`
 
-- Typically in a data science or data analysis project one would have to work with many sources of data.
+- Real projects combine several sources of data.
 
-- The researcher must be able to combine multiple datasets to answer the questions he or she is interested in.
-
-- As with the other `dplyr` verbs, there are different families of verbs that are designed to work with relational data and one of the most commonly used family of verbs are the mutating joins.
+- The mutating joins combine data frames by matching rows on a key.
 
 ----
 
@@ -634,71 +379,42 @@ For more options, nested `if_else()` statements become hard to read and could re
 
 ## More on `join()`
 
-- `left_join(x, y)` which combines all columns in data frame `x` with those in data frame `y` but only retains rows from `x`.
+- `left_join(x, y)` keeps all rows of `x`, adding matching columns from `y`.
 
-- `right_join(x, y)` also keeps all columns but operates in the opposite direction, returning only rows from `y`.
+- `right_join(x, y)` keeps all rows of `y`.
 
-- `full_join(x, y)` combines all columns of `x` with all columns of `y` and retains all rows from both data frames.
+- `full_join(x, y)` keeps all rows from both.
 
-- `inner_join(x, y)` combines all columns present in either `x` or `y` but only retains rows that are present in both data frames.
+- `inner_join(x, y)` keeps only rows present in both.
 
 
 ## Visual representation of the `left_join()`
 
-
 ![](images/dplyr_joins_left.png)
-
-
-
-## Visual representation of the `right_join()`
-
-
-![](images/dplyr_joins_right.png)
-
-
-## Visual representation of the `full_join()`
-
-
-![](images/dplyr_joins_full.png)
-
 
 
 ## `pivot()`
 
-Most often, when working with our data we may have to reshape our data from long format to wide format and back. We can use the `pivot` family of functions to achieve this task.
-
+We often reshape data between long and wide format with the `pivot` family of functions.
 
 ![](images/long_wide.png){fig-align="center"}
 
 
 ## Other Useful Functions
-### `drop_na()`
 
-The `drop_na()` function is extremely useful for when we need to subset a variable to remove missing values.
+- `drop_na()` removes rows with missing values in a chosen column.
 
----
-
-## Other Useful Functions (cont.)
-
-### `select()`
-
-While the `filter()` function allows you to return only certain rows matching a condition, the `select()` function returns only certain *columns*. The first argument is the data, and subsequent arguments are the columns you want.
+- `select()` returns only the columns you name (the column counterpart of `filter()`).
 
 
 ## More Resources for `dplyr` {.smaller}
-
 
 - The [Data Transformation cheatsheet](https://opensource.posit.co/resources/cheatsheets/data-transformation/) summarises the `dplyr` verbs on a single page.
 
 - The [RStudio IDE cheatsheet](https://opensource.posit.co/resources/cheatsheets/rstudio-ide/) is a handy reference for the editor itself.
 
-- [Posit Recipes](https://posit.cloud/learn/recipes) offers copy-paste solutions to common data-wrangling tasks.
-
-- Review the [Tibbles](https://r4ds.had.co.nz/tibbles.html) chapter of the excellent, free [**_R for Data Science_ book**](http://r4ds.had.co.nz).
-
-- Check out the [Transformations](https://r4ds.had.co.nz/transform.html) chapter to learn more about the `dplyr` package. Note that this chapter also uses the graphing package `ggplot2` which we have covered yesterday.
+- Review the [Tibbles](https://r4ds.had.co.nz/tibbles.html) and [Transformations](https://r4ds.had.co.nz/transform.html) chapters of the free [**_R for Data Science_** book](http://r4ds.had.co.nz).
 
 # Questions?
 
 # Thank You!
-
