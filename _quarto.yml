@@ -9,6 +9,7 @@ project:
     - resources/
     - exercises/
     - data/
+    - coi-serviceworker.js
 
 website:
   title: "DMgtAsia · Introduction to R & RStudio"
