@@ -47,6 +47,13 @@ other-links:
 -   Plethora of information on Data Science available, without clear direction
 -   Handholding in your learning journey, not learning in isolation
 -   Steep Learning Curve: structured pathways reduce frustration
+
+---
+
+## Why Best Practices Matter (cont.)
+
+<br>
+
 -   Inevitable use of AI: a Human in the Loop approach
 -   Set you apart from the crowd: credibility through proven methods
 -   Consistency among trainers, to maintain quality
@@ -299,6 +306,10 @@ my_analysis/
     -   `stroke_data_exploration.R`, `dengue_data_visualization.R`, instead of `scrpit1`, `script2`
     -   Can consider `01_`, `02_` ... for indicating sequential execution
 
+---
+
+## Naming Conventions (cont.)
+
 :::{.fragment}
 -   **Variables**:
     -   `age_group` not `ageGrp` or `AgGr` (consistency matters)
@@ -446,6 +457,10 @@ Source: *Hadley Wickham and Garrett Grolemund. 2017. R for Data Science: Import,
 
 - Embrace Change, Manage It Thoughtfully
 - Avoid Common Pitfalls
+
+---
+
+## Continuous Improvement Mindset (cont.)
 
 ### Learning Strategies for Trainers
 

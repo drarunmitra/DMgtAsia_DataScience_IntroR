@@ -118,7 +118,7 @@ But, each new question will expose a new aspect and increase your chance of maki
 
 :::
 ::: {.column  width="60%"}
-![](images/steps_SDA.png){width='80%' fig-align='center'}
+![](images/steps_SDA.png){width='60%' fig-align='center'}
 :::
 :::
 
@@ -673,6 +673,10 @@ Most often, when working with our data we may have to reshape our data from long
 ### `drop_na()`
 
 The `drop_na()` function is extremely useful for when we need to subset a variable to remove missing values.
+
+---
+
+## Other Useful Functions (cont.)
 
 ### `select()`
 
