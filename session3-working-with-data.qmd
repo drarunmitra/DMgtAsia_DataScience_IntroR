@@ -163,6 +163,8 @@ In short, it makes data exploration and data manipulation easy and fast in R.
 #| include: false
 
 options(tidyverse.quiet = TRUE)
+# keep printed tibbles narrow and short so they fit one slide
+options(width = 70, pillar.print_min = 5, pillar.print_max = 5)
 library(tidyverse)
 library(here)
 library(rio)
@@ -198,7 +200,7 @@ tb
 #| echo: false
 
 tb |>
-  print(width = 75)
+  print(width = 70)
 ```
 :::
 
